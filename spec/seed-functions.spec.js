@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { formatDataForTimeStamp } = require("../utils/seed-functions");
 
-describe.only("formatDataForTimeStamp", () => {
+describe("formatDataForTimeStamp", () => {
   it("changes created_at timestamp to date format when passed an array of length 1", () => {
     const input = [{ created_at: 1471522072389 }];
     const actual = formatDataForTimeStamp(input);
