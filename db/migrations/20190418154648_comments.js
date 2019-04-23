@@ -10,7 +10,7 @@ exports.up = function(knex, Promise) {
       .notNullable()
       .defaultTo(0);
     commentsData.timestamp("created_at").defaultTo(knex.fn.now());
-    commentsData.string("body").notNullable();
+    commentsData.text("body").notNullable();
   });
 };
 

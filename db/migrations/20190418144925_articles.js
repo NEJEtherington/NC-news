@@ -2,7 +2,7 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable("articles", articlesData => {
     articlesData.increments("article_id").primary();
     articlesData.string("title").notNullable();
-    articlesData.string("body").notNullable();
+    articlesData.text("body").notNullable();
     articlesData
       .integer("votes")
       .notNullable()
