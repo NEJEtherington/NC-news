@@ -56,7 +56,6 @@ describe("/", () => {
         .get("/api/articles")
         .expect(200)
         .then(res => {
-          console.log(res.body.articles);
           expect(res.body.articles[0]).to.contain.keys(
             "author",
             "title",
@@ -74,6 +73,14 @@ describe("/", () => {
         .expect(200)
         .then(res => {
           expect(res.body.articles[0].author).to.equal("butter_bridge");
+        });
+    });
+    it("GET status: 200 - add topic query", () => {
+      return request
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles[0].topic).to.equal("cats");
         });
     });
   });

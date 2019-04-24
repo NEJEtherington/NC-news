@@ -1,6 +1,6 @@
 const connection = require("../db/connection");
 
-const fetchAllArticles = ({ author }) => {
+const fetchAllArticles = ({ author, topic }) => {
   console.log("articles model ok");
   return connection
     .select(
@@ -17,6 +17,7 @@ const fetchAllArticles = ({ author }) => {
     .groupBy("articles.article_id")
     .modify(query => {
       if (author) query.where("articles.author", author);
+      if (topic) query.where("articles.topic", topic);
     });
 };
 
