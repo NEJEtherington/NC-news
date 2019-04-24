@@ -4,11 +4,9 @@ const getAllArticles = (req, res, next) => {
   console.log("articles controller ok");
   fetchAllArticles(req.query)
     .then(articles => {
-      return res.status(200).send({ articles: articles });
+      if (articles.length) return res.status(200).send({ articles: articles });
+      else res.status(404).send({ msg: "Invalid query!" });
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(next);
 };
-
 module.exports = { getAllArticles };

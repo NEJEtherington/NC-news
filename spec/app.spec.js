@@ -32,6 +32,7 @@ describe("/", () => {
           expect(res.body.topics).to.be.an("array");
         });
     });
+
     it("GET status: 200 - array has required properties", () => {
       return request
         .get("/api/topics")
@@ -51,6 +52,7 @@ describe("/", () => {
           expect(res.body.articles).to.be.an("array");
         });
     });
+
     it("GET status: 200 - array has required properties", () => {
       return request
         .get("/api/articles")
@@ -67,6 +69,7 @@ describe("/", () => {
           );
         });
     });
+
     it("GET status: 200 - add author query", () => {
       return request
         .get("/api/articles?author=butter_bridge")
@@ -75,12 +78,31 @@ describe("/", () => {
           expect(res.body.articles[0].author).to.equal("butter_bridge");
         });
     });
+
+    it("GET status: 404 - responds with error message when request is made with an invalid author", () => {
+      return request
+        .get("/api/articles?author=carl_sagan")
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("Invalid query!");
+        });
+    });
+
     it("GET status: 200 - add topic query", () => {
       return request
         .get("/api/articles?topic=cats")
         .expect(200)
         .then(res => {
           expect(res.body.articles[0].topic).to.equal("cats");
+        });
+    });
+
+    it("GET status: 404 - responds with error message when request is made with an invalid topic", () => {
+      return request
+        .get("/api/articles?topic=reggae")
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("Invalid query!");
         });
     });
   });
