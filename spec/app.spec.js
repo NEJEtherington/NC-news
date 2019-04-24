@@ -115,9 +115,63 @@ describe("/", () => {
         .get("/api/articles")
         .expect(200)
         .then(res => {
-          expect(res.body.articles).to.be.sortedBy("created_at", {
-            descending: true
-          });
+          expect(res.body.articles).to.be.descendingBy("created_at");
+        });
+    });
+    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+      return request
+        .get("/api/articles?sort_by=title")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.descendingBy("title");
+        });
+    });
+    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+      return request
+        .get("/api/articles?sort_by=author")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.descendingBy("author");
+        });
+    });
+    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+      return request
+        .get("/api/articles?sort_by=article_id")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.descendingBy("article_id");
+        });
+    });
+    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+      return request
+        .get("/api/articles?sort_by=topic")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.descendingBy("topic");
+        });
+    });
+    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+      return request
+        .get("/api/articles?sort_by=created_at")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.descendingBy("created_at");
+        });
+    });
+    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+      return request
+        .get("/api/articles?sort_by=votes")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.descendingBy("votes");
+        });
+    });
+    it("GET - res: 200 - articles can be ordered by ascending or descending", () => {
+      return request
+        .get("/api/articles?sort_by=title&order=asc")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.ascendingBy("title");
         });
     });
   });
