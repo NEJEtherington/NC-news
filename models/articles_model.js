@@ -15,6 +15,7 @@ const fetchAllArticles = ({ author, topic }) => {
     .from("articles")
     .leftJoin("comments", "comments.article_id", "=", "articles.article_id")
     .groupBy("articles.article_id")
+    .orderBy("created_at", "desc")
     .modify(query => {
       if (author) query.where("articles.author", author);
       if (topic) query.where("articles.topic", topic);

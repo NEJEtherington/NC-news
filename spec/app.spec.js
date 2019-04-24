@@ -1,12 +1,16 @@
 process.env.NODE_ENV = "test";
 
+const chai = require("chai");
 const { expect } = require("chai");
-const supertest = require("supertest");
+const chaiSorted = require("chai-sorted");
 
 const app = require("../app");
 const connection = require("../db/connection");
 
+const supertest = require("supertest");
 const request = supertest(app);
+
+chai.use(chaiSorted);
 
 describe("/", () => {
   beforeEach(() => connection.seed.run());
@@ -103,6 +107,17 @@ describe("/", () => {
         .expect(404)
         .then(res => {
           expect(res.body.msg).to.equal("Invalid query!");
+        });
+    });
+
+    it("GET status: 200 - default sort criteria: descending by date", () => {
+      return request
+        .get("/api/articles")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.sortedBy("created_at", {
+            descending: true
+          });
         });
     });
   });
