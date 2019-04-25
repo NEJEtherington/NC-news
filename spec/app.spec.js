@@ -237,5 +237,14 @@ describe("/", () => {
           expect(res.body.msg).to.equal("Bad Request");
         });
     });
+
+    it("GET status: 404 - responds with error message when request is made with an inexistent article_id", () => {
+      return request
+        .get("/api/articles/10000")
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("Article id does not exist!");
+        });
+    });
   });
 });

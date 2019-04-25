@@ -23,8 +23,14 @@ const getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   fetchArticleById(article_id)
     .then(article => {
-      console.log(article);
-      return res.status(200).send({ article: article });
+      if (!article.length) {
+        return Promise.reject({
+          status: 404,
+          msg: "Article id does not exist!"
+        });
+      } else {
+        return res.status(200).send({ article: article });
+      }
     })
     .catch(next);
 };
