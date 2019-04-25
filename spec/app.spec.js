@@ -164,7 +164,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET ?sort_by - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=votes")
         .expect(200)
@@ -173,7 +173,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res: 200 - articles can be ordered by ascending or descending", () => {
+    it("GET ?order - res: 200 - articles can be ordered by ascending or descending", () => {
       return request
         .get("/api/articles?sort_by=title&order=asc")
         .expect(200)
@@ -182,7 +182,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - sorts by default when request is made to sort by invalid column", () => {
+    it("GET ?sort_by - res:200 - sorts by default when request is made to sort by invalid column", () => {
       return request
         .get("/api/articles?sort_by=pizza")
         .expect(200)
@@ -191,7 +191,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - orders by default when request is made to order by invalid value", () => {
+    it("GET ?order - res:200 - orders by default when request is made to order by invalid value", () => {
       return request
         .get("/api/articles?sort_by=pizza&order=pizza")
         .expect(200)
@@ -226,6 +226,15 @@ describe("/", () => {
             "votes",
             "comment_count"
           );
+        });
+    });
+
+    it("GET status: 400 - responds with error message when request is made with an invalid article_id", () => {
+      return request
+        .get("/api/articles/pizza")
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Bad Request");
         });
     });
   });
