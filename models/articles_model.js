@@ -69,8 +69,17 @@ const updateArticleVotes = (article_id, inc_votes) => {
     .returning("*");
 };
 
+const fetchCommentsByArticleId = article_id => {
+  return connection
+    .from("comments")
+    .select("comment_id", "votes", " created_at", "author", "body")
+    .where({ "comments.article_id": article_id })
+    .returning("*");
+};
+
 module.exports = {
   fetchAllArticles,
   fetchArticleById,
-  updateArticleVotes
+  updateArticleVotes,
+  fetchCommentsByArticleId
 };

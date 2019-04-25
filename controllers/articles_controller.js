@@ -1,7 +1,8 @@
 const {
   fetchAllArticles,
   fetchArticleById,
-  updateArticleVotes
+  updateArticleVotes,
+  fetchCommentsByArticleId
 } = require("../models/articles_model");
 
 const getAllArticles = (req, res, next) => {
@@ -20,7 +21,6 @@ const getAllArticles = (req, res, next) => {
 };
 
 const getArticleById = (req, res, next) => {
-  console.log("articles controller ok");
   const { article_id } = req.params;
   fetchArticleById(article_id)
     .then(article => {
@@ -53,4 +53,18 @@ const patchArticleVotes = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getAllArticles, getArticleById, patchArticleVotes };
+const getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  fetchCommentsByArticleId(article_id)
+    .then(comments => {
+      return res.status(200).send(comments);
+    })
+    .catch(next);
+};
+
+module.exports = {
+  getAllArticles,
+  getArticleById,
+  patchArticleVotes,
+  getCommentsByArticleId
+};

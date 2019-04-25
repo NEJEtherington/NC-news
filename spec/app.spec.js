@@ -286,5 +286,29 @@ describe("/", () => {
           expect(res.body.msg).to.equal("Article id does not exist!");
         });
     });
+
+    it("GET status:200 - /:article_id/comments responds with an array of comments for given article_id", () => {
+      return request
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(res => {
+          expect(Array.isArray(res.body)).to.equal(true);
+        });
+    });
+
+    it.only("GET status: 200 - /:article_id/comments array has required properties", () => {
+      return request
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(res => {
+          expect(res.body[0]).to.contain.keys(
+            "comment_id",
+            "votes",
+            "created_at",
+            "author",
+            "body"
+          );
+        });
+    });
   });
 });
