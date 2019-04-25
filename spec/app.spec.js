@@ -247,13 +247,23 @@ describe("/", () => {
         });
     });
 
-    it.only("PATCH status:200 - /:articles_id accepts a body of an object in the form { inc_votes: newVote }", () => {
+    it("PATCH status:200 - /:articles_id accepts a body of an object in the form { inc_votes: newVote }", () => {
       return request
         .patch("/api/articles/1")
         .send({ inc_votes: -99 })
         .expect(200)
         .then(res => {
           expect(res.body.article[0].votes).to.equal(1);
+        });
+    });
+
+    it("PATCH status:400 - :/articles_id responds with error message when request is made with an invalid article_id", () => {
+      return request
+        .patch("/api/articles/1")
+        .send({ inc_votes: "z" })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Bad Request");
         });
     });
   });
