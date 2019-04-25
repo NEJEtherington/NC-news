@@ -266,5 +266,15 @@ describe("/", () => {
           expect(res.body.msg).to.equal("Bad Request");
         });
     });
+
+    it("PATCH - status: 400 - :/articles_id responds with error message when passed a malformed body", () => {
+      return request
+        .patch("/api/articles/1")
+        .send({ pizza: 2 })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Missing inc_votes key in body!");
+        });
+    });
   });
 });

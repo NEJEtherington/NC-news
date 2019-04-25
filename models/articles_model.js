@@ -57,6 +57,11 @@ const fetchArticleById = article_id => {
 };
 
 const updateArticleVotes = (article_id, inc_votes) => {
+  if (inc_votes === undefined)
+    return Promise.reject({
+      status: 400,
+      msg: "Missing inc_votes key in body!"
+    });
   return connection
     .from("articles")
     .where({ article_id })
