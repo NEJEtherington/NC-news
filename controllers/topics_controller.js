@@ -3,12 +3,9 @@ const { fetchAllTopics } = require("../models/topics_model");
 const getAllTopics = (req, res, next) => {
   fetchAllTopics()
     .then(topics => {
-      console.log(topics);
       return res.status(200).send({ topics: topics });
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => next(err));
 };
 
 module.exports = { getAllTopics };
