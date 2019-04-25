@@ -1,9 +1,22 @@
 const connection = require("../db/connection");
 
 const fetchAllArticles = ({ author, topic, sort_by, order }) => {
-  console.log("articles model ok");
-  const sortFields = ["votes", "comment_count"];
-
+  const sortFields = [
+    "author",
+    "title",
+    "article_id",
+    "topic",
+    "created_at",
+    "votes",
+    "comment_count"
+  ];
+  if (!sortFields.includes(sort_by)) {
+    sort_by = "articles.created_at";
+  }
+  const sortOrder = ["asc", "desc"];
+  if (!sortOrder.includes(order)) {
+    order = "desc";
+  }
   return connection
     .select(
       "articles.author",
@@ -17,7 +30,7 @@ const fetchAllArticles = ({ author, topic, sort_by, order }) => {
     .from("articles")
     .leftJoin("comments", "comments.article_id", "=", "articles.article_id")
     .groupBy("articles.article_id")
-    .orderBy(sort_by || "created_at", order || "desc")
+    .orderBy(sort_by, order)
     .modify(query => {
       if (author) query.where("articles.author", author);
       if (topic) query.where("articles.topic", topic);

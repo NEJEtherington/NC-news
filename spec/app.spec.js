@@ -47,7 +47,7 @@ describe("/", () => {
     });
   });
 
-  describe.only("/api/articles", () => {
+  describe("/api/articles", () => {
     it("GET status: 200 - array", () => {
       return request
         .get("/api/articles")
@@ -182,24 +182,20 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - responds with message when request is made to sort by invalid column but still sorts by default", () => {
+    it("GET - res:200 - sorts by default when request is made to sort by invalid column", () => {
       return request
         .get("/api/articles?sort_by=pizza")
         .expect(200)
         .then(res => {
-          expect(res.body.msg).to.equal("No such column exists!");
           expect(res.body.articles).to.be.descendingBy("created_at");
         });
     });
 
-    it("GET - res:200 - responds with message when request is made to order by invalid value but still orders by default", () => {
+    it("GET - res:200 - orders by default when request is made to order by invalid value", () => {
       return request
         .get("/api/articles?sort_by=pizza&order=pizza")
         .expect(200)
         .then(res => {
-          expect(res.body.msg).to.equal(
-            "Can only order by ascending or descending!"
-          );
           expect(res.body.articles).to.be.descendingBy("created_at");
         });
     });
