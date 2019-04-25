@@ -276,5 +276,15 @@ describe("/", () => {
           expect(res.body.msg).to.equal("Missing inc_votes key in body!");
         });
     });
+
+    it("PATCH status: 404 - responds with error message when request is made with an inexistent article_id", () => {
+      return request
+        .patch("/api/articles/10000")
+        .send({ inc_votes: 1 })
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("Article id does not exist!");
+        });
+    });
   });
 });

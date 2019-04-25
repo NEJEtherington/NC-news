@@ -41,7 +41,14 @@ const patchArticleVotes = (req, res, next) => {
   const { inc_votes } = req.body;
   updateArticleVotes(article_id, inc_votes)
     .then(article => {
-      return res.status(200).send({ article });
+      if (!article.length) {
+        return Promise.reject({
+          status: 404,
+          msg: "Article id does not exist!"
+        });
+      } else {
+        return res.status(200).send({ article });
+      }
     })
     .catch(next);
 };
