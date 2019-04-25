@@ -201,13 +201,31 @@ describe("/", () => {
     });
   });
 
-  describe("/api/articles/:article_id", () => {
+  describe.only("/api/articles/:article_id", () => {
     it("GET status: 200 - responds with only articles with the passed article_id", () => {
       return request
         .get("/api/articles/1")
         .expect(200)
         .then(res => {
           expect(res.body.article[0].article_id).to.equal(1);
+        });
+    });
+
+    it("GET status: 200 - has required properties", () => {
+      return request
+        .get("/api/articles/1")
+        .expect(200)
+        .then(res => {
+          expect(res.body.article[0]).to.contain.keys(
+            "author",
+            "title",
+            "article_id",
+            "topic",
+            "body",
+            "created_at",
+            "votes",
+            "comment_count"
+          );
         });
     });
   });
