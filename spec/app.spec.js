@@ -246,5 +246,15 @@ describe("/", () => {
           expect(res.body.msg).to.equal("Article id does not exist!");
         });
     });
+
+    it.only("PATCH status:200 - /:articles_id accepts a body of an object in the form { inc_votes: newVote }", () => {
+      return request
+        .patch("/api/articles/1")
+        .send({ inc_votes: -99 })
+        .expect(200)
+        .then(res => {
+          expect(res.body.article[0].votes).to.equal(1);
+        });
+    });
   });
 });

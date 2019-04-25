@@ -56,7 +56,16 @@ const fetchArticleById = article_id => {
     .groupBy("articles.article_id");
 };
 
+const updateArticleVotes = (article_id, inc_votes) => {
+  return connection
+    .from("articles")
+    .where({ article_id })
+    .increment("votes", inc_votes)
+    .returning("*");
+};
+
 module.exports = {
   fetchAllArticles,
-  fetchArticleById
+  fetchArticleById,
+  updateArticleVotes
 };
