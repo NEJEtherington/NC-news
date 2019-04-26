@@ -389,5 +389,19 @@ describe("/", () => {
           expect(res.body.msg).to.equal("Bad Request");
         });
     });
+
+    it("POST res:404 - responds with error message when request body has invalid author", () => {
+      const newComment = {
+        author: "Prince",
+        body: "Sometimes it snows in April"
+      };
+      return request
+        .post("/api.artticles/1/comments")
+        .send(newComment)
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("Route Not Found");
+        });
+    });
   });
 });
