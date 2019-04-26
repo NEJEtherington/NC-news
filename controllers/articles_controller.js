@@ -54,10 +54,9 @@ const patchArticleVotes = (req, res, next) => {
 };
 
 const getCommentsByArticleId = (req, res, next) => {
-  const { article_id } = req.params;
-  fetchCommentsByArticleId(article_id)
+  fetchCommentsByArticleId({ ...req.query, ...req.params })
     .then(comments => {
-      return res.status(200).send(comments);
+      return res.status(200).send({ comments });
     })
     .catch(next);
 };

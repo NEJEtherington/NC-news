@@ -69,12 +69,20 @@ const updateArticleVotes = (article_id, inc_votes) => {
     .returning("*");
 };
 
-const fetchCommentsByArticleId = article_id => {
+const fetchCommentsByArticleId = ({ article_id, sort_by, order }) => {
+  const sortFields = ["comment_id", "votes", " created_at", "author", "body"];
+  if (!sortFields.includes(sort_by)) {
+    sort_by = "created_at";
+  }
+  const sortOrder = ["asc", "desc"];
+  if (!sortOrder.includes(order)) {
+    order = "desc";
+  }
   return connection
-    .from("comments")
     .select("comment_id", "votes", " created_at", "author", "body")
+    .from("comments")
     .where({ "comments.article_id": article_id })
-    .returning("*");
+    .orderBy(sort_by, order);
 };
 
 module.exports = {

@@ -119,7 +119,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=title")
         .expect(200)
@@ -128,7 +128,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=author")
         .expect(200)
@@ -137,7 +137,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=article_id")
         .expect(200)
@@ -146,7 +146,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=topic")
         .expect(200)
@@ -155,7 +155,7 @@ describe("/", () => {
         });
     });
 
-    it("GET - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=created_at")
         .expect(200)
@@ -201,13 +201,13 @@ describe("/", () => {
     });
   });
 
-  describe.only("/api/articles/:article_id", () => {
+  describe("/api/articles/:article_id", () => {
     it("GET status: 200 - responds with only articles with the passed article_id", () => {
       return request
-        .get("/api/articles/1")
+        .get("/api/articles/2")
         .expect(200)
         .then(res => {
-          expect(res.body.article[0].article_id).to.equal(1);
+          expect(res.body.article[0].article_id).to.equal(2);
         });
     });
 
@@ -267,7 +267,7 @@ describe("/", () => {
         });
     });
 
-    it("PATCH - status: 400 - :/articles_id responds with error message when passed a malformed body", () => {
+    it("PATCH status: 400 - :/articles_id responds with error message when passed a malformed body", () => {
       return request
         .patch("/api/articles/1")
         .send({ pizza: 2 })
@@ -292,22 +292,58 @@ describe("/", () => {
         .get("/api/articles/1/comments")
         .expect(200)
         .then(res => {
-          expect(Array.isArray(res.body)).to.equal(true);
+          expect(Array.isArray(res.body.comments)).to.equal(true);
         });
     });
 
-    it.only("GET status: 200 - /:article_id/comments array has required properties", () => {
+    it("GET status: 200 - /:article_id/comments array has required properties", () => {
       return request
         .get("/api/articles/1/comments")
         .expect(200)
         .then(res => {
-          expect(res.body[0]).to.contain.keys(
+          expect(res.body.comments[0]).to.contain.keys(
             "comment_id",
             "votes",
             "created_at",
             "author",
             "body"
           );
+        });
+    });
+
+    it("GET status: 200 - /:article_id/comments default sort criteria: descending by date", () => {
+      return request
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(res => {
+          expect(res.body.comments).to.be.descendingBy("created_at");
+        });
+    });
+
+    it("GET status: 200 - /:article_id/comments can be sorted by any valid column (default descending order)", () => {
+      return request
+        .get("/api/articles/1/comments?sort_by=author")
+        .expect(200)
+        .then(res => {
+          expect(res.body.comments).to.be.descendingBy("author");
+        });
+    });
+
+    it("GET ?sort_by - res:200 - /:article_id/comments sorts by default when request is made to sort by invalid column", () => {
+      return request
+        .get("/api/articles/1/comments?sort_by=Friday")
+        .expect(200)
+        .then(res => {
+          expect(res.body.comments).to.be.descendingBy("created_at");
+        });
+    });
+
+    it("GET ?order - res:200 - orders by default when request is made to order by invalid value", () => {
+      return request
+        .get("/api/articles/1/comments?sort_by=Saturday&order=Sunday")
+        .expect(200)
+        .then(res => {
+          expect(res.body.comments).to.be.descendingBy("created_at");
         });
     });
   });
