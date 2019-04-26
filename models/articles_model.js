@@ -38,7 +38,6 @@ const fetchAllArticles = ({ author, topic, sort_by, order }) => {
 };
 
 const fetchArticleById = article_id => {
-  console.log("articles model ok");
   return connection
     .select(
       "articles.author",
