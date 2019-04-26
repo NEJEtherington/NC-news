@@ -396,11 +396,53 @@ describe("/", () => {
         body: "Sometimes it snows in April"
       };
       return request
-        .post("/api.artticles/1/comments")
+        .post("/api.articles/1/comments")
         .send(newComment)
         .expect(404)
         .then(res => {
           expect(res.body.msg).to.equal("Route Not Found");
+        });
+    });
+  });
+
+  describe.only("/api/comments/:comment_id", () => {
+    it("PATCH status:200 - accepts a body of an object in the form { inc_votes: newVote }", () => {
+      return request
+        .patch("/api/comments/1")
+        .send({ inc_votes: -15 })
+        .expect(200)
+        .then(res => {
+          expect(res.body.comment[0].votes).to.equal(1);
+        });
+    });
+
+    it("PATCH status:400 - responds with error message when request is made with an invalid comment_id", () => {
+      return request
+        .patch("/api/comments/1")
+        .send({ inc_votes: "capybara" })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Bad Request");
+        });
+    });
+
+    it("PATCH status:400 - responds with error message when passed a malformed body", () => {
+      return request
+        .patch("/api/comments/1")
+        .send({ broccoli: 2 })
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Missing inc_votes key in body!");
+        });
+    });
+
+    it("PATCH status:404 - responds with error message when request is made with an inexistent article_id", () => {
+      return request
+        .patch("/api/comments/10000")
+        .send({ inc_votes: 1 })
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("Article id does not exist!");
         });
     });
   });
