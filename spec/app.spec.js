@@ -28,7 +28,7 @@ describe("/", () => {
   });
 
   describe("/api/topics", () => {
-    it("GET status: 200 - array", () => {
+    it("GET status:200 - array", () => {
       return request
         .get("/api/topics")
         .expect(200)
@@ -37,7 +37,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - array has required properties", () => {
+    it("GET status:200 - array has required properties", () => {
       return request
         .get("/api/topics")
         .expect(200)
@@ -48,7 +48,7 @@ describe("/", () => {
   });
 
   describe("/api/articles", () => {
-    it("GET status: 200 - array", () => {
+    it("GET status:200 - array", () => {
       return request
         .get("/api/articles")
         .expect(200)
@@ -57,7 +57,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - array has required properties", () => {
+    it("GET status:200 - array has required properties", () => {
       return request
         .get("/api/articles")
         .expect(200)
@@ -74,7 +74,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - add author query", () => {
+    it("GET status:200 - add author query", () => {
       return request
         .get("/api/articles?author=butter_bridge")
         .expect(200)
@@ -83,7 +83,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 404 - responds with error message when request is made with an invalid author", () => {
+    it("GET status:404 - responds with error message when request is made with an invalid author", () => {
       return request
         .get("/api/articles?author=carl_sagan")
         .expect(404)
@@ -92,7 +92,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - add topic query", () => {
+    it("GET status:200 - add topic query", () => {
       return request
         .get("/api/articles?topic=cats")
         .expect(200)
@@ -101,7 +101,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 404 - responds with error message when request is made with an invalid topic", () => {
+    it("GET status:404 - responds with error message when request is made with an invalid topic", () => {
       return request
         .get("/api/articles?topic=reggae")
         .expect(404)
@@ -110,7 +110,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - default sort criteria: descending by date", () => {
+    it("GET status:200 - default sort criteria: descending by date", () => {
       return request
         .get("/api/articles")
         .expect(200)
@@ -119,7 +119,7 @@ describe("/", () => {
         });
     });
 
-    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET status:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=title")
         .expect(200)
@@ -128,7 +128,7 @@ describe("/", () => {
         });
     });
 
-    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET status:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=author")
         .expect(200)
@@ -137,7 +137,7 @@ describe("/", () => {
         });
     });
 
-    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET status:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=article_id")
         .expect(200)
@@ -146,7 +146,7 @@ describe("/", () => {
         });
     });
 
-    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET status:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=topic")
         .expect(200)
@@ -155,7 +155,7 @@ describe("/", () => {
         });
     });
 
-    it("GET res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET status:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=created_at")
         .expect(200)
@@ -164,7 +164,7 @@ describe("/", () => {
         });
     });
 
-    it("GET ?sort_by - res:200 - articles can be sorted by any valid column as a url sort_by query", () => {
+    it("GET ?sort_by - status:200 - articles can be sorted by any valid column as a url sort_by query", () => {
       return request
         .get("/api/articles?sort_by=votes")
         .expect(200)
@@ -182,7 +182,7 @@ describe("/", () => {
         });
     });
 
-    it("GET ?sort_by - res:200 - sorts by default when request is made to sort by invalid column", () => {
+    it("GET ?sort_by - status:200 - sorts by default when request is made to sort by invalid column", () => {
       return request
         .get("/api/articles?sort_by=pizza")
         .expect(200)
@@ -191,7 +191,7 @@ describe("/", () => {
         });
     });
 
-    it("GET ?order - res:200 - orders by default when request is made to order by invalid value", () => {
+    it("GET ?order - status:200 - orders by default when request is made to order by invalid value", () => {
       return request
         .get("/api/articles?sort_by=pizza&order=pizza")
         .expect(200)
@@ -211,7 +211,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - has required properties", () => {
+    it("GET status:200 - has required properties", () => {
       return request
         .get("/api/articles/1")
         .expect(200)
@@ -229,7 +229,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 400 - responds with error message when request is made with an invalid article_id", () => {
+    it("GET status:400 - responds with error message when request is made with an invalid article_id", () => {
       return request
         .get("/api/articles/pizza")
         .expect(400)
@@ -238,7 +238,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 404 - responds with error message when request is made with an inexistent article_id", () => {
+    it("GET status:404 - responds with error message when request is made with an inexistent article_id", () => {
       return request
         .get("/api/articles/10000")
         .expect(404)
@@ -267,7 +267,7 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status: 400 - :/articles_id responds with error message when passed a malformed body", () => {
+    it("PATCH status:400 - :/articles_id responds with error message when passed a malformed body", () => {
       return request
         .patch("/api/articles/1")
         .send({ pizza: 2 })
@@ -277,7 +277,7 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status: 404 - responds with error message when request is made with an inexistent article_id", () => {
+    it("PATCH status:404 - responds with error message when request is made with an inexistent article_id", () => {
       return request
         .patch("/api/articles/10000")
         .send({ inc_votes: 1 })
@@ -296,7 +296,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - /:article_id/comments array has required properties", () => {
+    it("GET status:200 - /:article_id/comments array has required properties", () => {
       return request
         .get("/api/articles/1/comments")
         .expect(200)
@@ -329,7 +329,7 @@ describe("/", () => {
         });
     });
 
-    it("GET ?sort_by - res:200 - /:article_id/comments sorts by default when request is made to sort by invalid column", () => {
+    it("GET ?sort_by - status:200 - /:article_id/comments sorts by default when request is made to sort by invalid column", () => {
       return request
         .get("/api/articles/1/comments?sort_by=Friday")
         .expect(200)
@@ -344,6 +344,21 @@ describe("/", () => {
         .expect(200)
         .then(res => {
           expect(res.body.comments).to.be.descendingBy("created_at");
+        });
+    });
+
+    it("POST res:201 - request body accepts object with userame and body properties and responds with posted comment", () => {
+      const newComment = {
+        author: "icellusedkars",
+        body: "today is Friday"
+      };
+      return request
+        .post("/api/articles/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then(res => {
+          expect(res.body[0].author).to.equal("icellusedkars");
+          expect(res.body[0].body).to.equal("today is Friday");
         });
     });
   });

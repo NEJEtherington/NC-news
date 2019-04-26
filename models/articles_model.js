@@ -85,9 +85,22 @@ const fetchCommentsByArticleId = ({ article_id, sort_by, order }) => {
     .orderBy(sort_by, order);
 };
 
+const insertComment = ({ article_id, author, body }) => {
+  console.log("articles model ok");
+  return connection
+    .from("comments")
+    .where({ "comments.article_id": article_id })
+    .insert({ article_id: article_id, author: author, body: body })
+    .returning("*")
+    .then(result => {
+      return result;
+    });
+};
+
 module.exports = {
   fetchAllArticles,
   fetchArticleById,
   updateArticleVotes,
-  fetchCommentsByArticleId
+  fetchCommentsByArticleId,
+  insertComment
 };

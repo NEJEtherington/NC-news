@@ -2,7 +2,8 @@ const {
   fetchAllArticles,
   fetchArticleById,
   updateArticleVotes,
-  fetchCommentsByArticleId
+  fetchCommentsByArticleId,
+  insertComment
 } = require("../models/articles_model");
 
 const getAllArticles = (req, res, next) => {
@@ -61,9 +62,20 @@ const getCommentsByArticleId = (req, res, next) => {
     .catch(next);
 };
 
+const addComment = (req, res, next) => {
+  console.log("articles controller ok");
+  const { article_id } = req.params;
+  insertComment({ article_id, ...req.body })
+    .then(comment => {
+      return res.status(201).send(comment);
+    })
+    .catch(next);
+};
+
 module.exports = {
   getAllArticles,
   getArticleById,
   patchArticleVotes,
-  getCommentsByArticleId
+  getCommentsByArticleId,
+  addComment
 };
