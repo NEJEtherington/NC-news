@@ -67,7 +67,14 @@ const addComment = (req, res, next) => {
   const { article_id } = req.params;
   insertComment({ article_id, ...req.body })
     .then(comment => {
-      return res.status(201).send(comment);
+      if (!comment[0].body.length) {
+        return Promise.reject({
+          status: 400,
+          msg: "Comment has no body!"
+        });
+      } else {
+        return res.status(201).send(comment);
+      }
     })
     .catch(next);
 };

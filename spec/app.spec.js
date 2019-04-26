@@ -347,7 +347,7 @@ describe("/", () => {
         });
     });
 
-    it("POST res:201 - request body accepts object with userame and body properties and responds with posted comment", () => {
+    it.only("POST res:201 - request body accepts object with userame and body properties and responds with posted comment", () => {
       const newComment = {
         author: "icellusedkars",
         body: "today is Friday"
@@ -359,6 +359,20 @@ describe("/", () => {
         .then(res => {
           expect(res.body[0].author).to.equal("icellusedkars");
           expect(res.body[0].body).to.equal("today is Friday");
+        });
+    });
+
+    it.only("POST res:400 - responds with error message when not passed a body", () => {
+      const newComment = {
+        author: "icellusedkars",
+        body: ""
+      };
+      return request
+        .post("/api/articles/1/comments")
+        .send(newComment)
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Comment has no body!");
         });
     });
   });
