@@ -347,7 +347,7 @@ describe("/", () => {
         });
     });
 
-    it.only("POST res:201 - request body accepts object with userame and body properties and responds with posted comment", () => {
+    it("POST res:201 - request body accepts object with userame and body properties and responds with posted comment", () => {
       const newComment = {
         author: "icellusedkars",
         body: "today is Friday"
@@ -362,7 +362,7 @@ describe("/", () => {
         });
     });
 
-    it.only("POST res:400 - responds with error message when not passed a body", () => {
+    it("POST res:400 - responds with error message when not passed a body", () => {
       const newComment = {
         author: "icellusedkars",
         body: ""
@@ -373,6 +373,20 @@ describe("/", () => {
         .expect(400)
         .then(res => {
           expect(res.body.msg).to.equal("Comment has no body!");
+        });
+    });
+
+    it("POST res:400 - responds with error message when request body contains invalid keys", () => {
+      const newComment = {
+        weekend: "icellusedkars",
+        rain: "same old"
+      };
+      return request
+        .post("/api/articles/1/comments")
+        .send(newComment)
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Bad Request");
         });
     });
   });

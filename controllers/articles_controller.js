@@ -63,7 +63,6 @@ const getCommentsByArticleId = (req, res, next) => {
 };
 
 const addComment = (req, res, next) => {
-  console.log("articles controller ok");
   const { article_id } = req.params;
   insertComment({ article_id, ...req.body })
     .then(comment => {

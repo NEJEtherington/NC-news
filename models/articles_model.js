@@ -86,7 +86,6 @@ const fetchCommentsByArticleId = ({ article_id, sort_by, order }) => {
 };
 
 const insertComment = ({ article_id, author, body }) => {
-  console.log("articles model ok");
   return connection
     .from("comments")
     .where({ "comments.article_id": article_id })
