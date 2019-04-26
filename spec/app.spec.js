@@ -405,7 +405,7 @@ describe("/", () => {
     });
   });
 
-  describe.only("/api/comments/:comment_id", () => {
+  describe("/api/comments/:comment_id", () => {
     it("PATCH status:200 - accepts a body of an object in the form { inc_votes: newVote }", () => {
       return request
         .patch("/api/comments/1")
@@ -443,6 +443,19 @@ describe("/", () => {
         .expect(404)
         .then(res => {
           expect(res.body.msg).to.equal("Article id does not exist!");
+        });
+    });
+
+    it("DELETE - status: 204 - /:comment_id deletes the specified comment", () => {
+      return request.delete("/api/comments/1").expect(204);
+    });
+
+    it("DELETE - status:404  - /:comment_id for non-existent comment_id", () => {
+      return request
+        .delete("/api/comments/150")
+        .expect(404)
+        .then(res => {
+          expect(res.body.msg).to.equal("comment_id not found");
         });
     });
   });

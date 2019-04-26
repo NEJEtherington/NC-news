@@ -1,7 +1,6 @@
 const connection = require("../db/connection");
 
 const updateCommentVotes = (comment_id, inc_votes) => {
-  console.log("comments model ok");
   if (inc_votes === undefined)
     return Promise.reject({
       status: 400,
@@ -14,4 +13,10 @@ const updateCommentVotes = (comment_id, inc_votes) => {
     .returning("*");
 };
 
-module.exports = { updateCommentVotes };
+const removeCommentById = comment_id => {
+  return connection("comments")
+    .where({ comment_id })
+    .del();
+};
+
+module.exports = { updateCommentVotes, removeCommentById };
