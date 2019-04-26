@@ -202,7 +202,7 @@ describe("/", () => {
   });
 
   describe("/api/articles/:article_id", () => {
-    it("GET status: 200 - responds with only articles with the passed article_id", () => {
+    it("GET status:200 - responds with only articles with the passed article_id", () => {
       return request
         .get("/api/articles/2")
         .expect(200)
@@ -247,7 +247,7 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status:200 - /:articles_id accepts a body of an object in the form { inc_votes: newVote }", () => {
+    it("PATCH status:200 - accepts a body of an object in the form { inc_votes: newVote }", () => {
       return request
         .patch("/api/articles/1")
         .send({ inc_votes: -99 })
@@ -257,7 +257,7 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status:400 - :/articles_id responds with error message when request is made with an invalid article_id", () => {
+    it("PATCH status:400 - :responds with error message when request is made with an invalid article_id", () => {
       return request
         .patch("/api/articles/1")
         .send({ inc_votes: "z" })
@@ -267,7 +267,7 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status:400 - :/articles_id responds with error message when passed a malformed body", () => {
+    it("PATCH status:400 - responds with error message when passed a malformed body", () => {
       return request
         .patch("/api/articles/1")
         .send({ pizza: 2 })
@@ -287,7 +287,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status:200 - /:article_id/comments responds with an array of comments for given article_id", () => {
+    it("GET status:200 - responds with an array of comments for given article_id", () => {
       return request
         .get("/api/articles/1/comments")
         .expect(200)
@@ -296,7 +296,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status:200 - /:article_id/comments array has required properties", () => {
+    it("GET status:200 - array has required properties", () => {
       return request
         .get("/api/articles/1/comments")
         .expect(200)
@@ -311,7 +311,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - /:article_id/comments default sort criteria: descending by date", () => {
+    it("GET ?sort_by - status:200 - default sort criteria: descending by date", () => {
       return request
         .get("/api/articles/1/comments")
         .expect(200)
@@ -320,7 +320,7 @@ describe("/", () => {
         });
     });
 
-    it("GET status: 200 - /:article_id/comments can be sorted by any valid column (default descending order)", () => {
+    it("GET ?sort_by - status:200 - can be sorted by any valid column (default descending order)", () => {
       return request
         .get("/api/articles/1/comments?sort_by=author")
         .expect(200)
@@ -329,7 +329,7 @@ describe("/", () => {
         });
     });
 
-    it("GET ?sort_by - status:200 - /:article_id/comments sorts by default when request is made to sort by invalid column", () => {
+    it("GET ?sort_by - status:200 - sorts by default when request is made to sort by invalid column", () => {
       return request
         .get("/api/articles/1/comments?sort_by=Friday")
         .expect(200)
@@ -338,7 +338,7 @@ describe("/", () => {
         });
     });
 
-    it("GET ?order - res:200 - orders by default when request is made to order by invalid value", () => {
+    it("GET ?order - status:200 - orders by default when request is made to order by invalid value", () => {
       return request
         .get("/api/articles/1/comments?sort_by=Saturday&order=Sunday")
         .expect(200)
@@ -347,7 +347,7 @@ describe("/", () => {
         });
     });
 
-    it("POST res:201 - request body accepts object with userame and body properties and responds with posted comment", () => {
+    it("POST status:201 - request body accepts object with userame and body properties and responds with posted comment", () => {
       const newComment = {
         author: "icellusedkars",
         body: "today is Friday"
@@ -362,7 +362,7 @@ describe("/", () => {
         });
     });
 
-    it("POST res:400 - responds with error message when not passed a body", () => {
+    it("POST status:400 - responds with error message when not passed a body", () => {
       const newComment = {
         author: "icellusedkars",
         body: ""
@@ -376,7 +376,7 @@ describe("/", () => {
         });
     });
 
-    it("POST res:400 - responds with error message when request body contains invalid keys", () => {
+    it("POST status:400 - responds with error message when request body contains invalid keys", () => {
       const newComment = {
         weekend: "icellusedkars",
         rain: "same old"
@@ -390,7 +390,7 @@ describe("/", () => {
         });
     });
 
-    it("POST res:404 - responds with error message when request body has invalid author", () => {
+    it("POST status:404 - responds with error message when request body has invalid author", () => {
       const newComment = {
         author: "Prince",
         body: "Sometimes it snows in April"
@@ -446,16 +446,40 @@ describe("/", () => {
         });
     });
 
-    it("DELETE - status: 204 - /:comment_id deletes the specified comment", () => {
+    it("DELETE status:204 - deletes the specified comment", () => {
       return request.delete("/api/comments/1").expect(204);
     });
 
-    it("DELETE - status:404  - /:comment_id for non-existent comment_id", () => {
+    it("DELETE status:404 - responds with error for non-existent comment_id", () => {
       return request
         .delete("/api/comments/150")
         .expect(404)
         .then(res => {
           expect(res.body.msg).to.equal("comment_id not found");
+        });
+    });
+  });
+
+  describe("/api/users/:username", () => {
+    it("GET status:200 - responds with object with required properties", () => {
+      return request
+        .get("/api/users/butter_bridge")
+        .expect(200)
+        .then(res => {
+          expect(res.body.user[0]).to.contain.keys(
+            "username",
+            "avatar_url",
+            "name"
+          );
+        });
+    });
+
+    it("GET status:404 - responds with error when passed invalis username", () => {
+      return request
+        .get("/api/users/rosie")
+        .expect(400)
+        .then(res => {
+          expect(res.body.msg).to.equal("Invalid username!");
         });
     });
   });
