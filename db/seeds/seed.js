@@ -38,7 +38,7 @@ exports.seed = (knex, Promise) => {
           ...restOfData
         } = comment;
         const art_id = articlesData.find(
-          element => element.belongs_to === comment.title
+          element => element.title === comment.belongs_to
         );
         return {
           article_id: art_id.article_id,

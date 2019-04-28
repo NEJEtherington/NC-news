@@ -24,8 +24,9 @@ const getAllArticles = (req, res, next) => {
 const getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   fetchArticleById(article_id)
-    .then(article => {
-      if (!article.length) {
+    .then(articleArr => {
+      const [article] = articleArr;
+      if (!articleArr.length) {
         return Promise.reject({
           status: 404,
           msg: "Article id does not exist!"
@@ -41,8 +42,9 @@ const patchArticleVotes = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
   updateArticleVotes(article_id, inc_votes)
-    .then(article => {
-      if (!article.length) {
+    .then(articleArr => {
+      const [article] = articleArr;
+      if (!articleArr.length) {
         return Promise.reject({
           status: 404,
           msg: "Article id does not exist!"
@@ -57,6 +59,11 @@ const patchArticleVotes = (req, res, next) => {
 const getCommentsByArticleId = (req, res, next) => {
   fetchCommentsByArticleId({ ...req.query, ...req.params })
     .then(comments => {
+      if (comments.length === 0)
+        return Promise.reject({
+          status: 404,
+          msg: "Article id does not exist!"
+        });
       return res.status(200).send({ comments });
     })
     .catch(next);
@@ -65,15 +72,9 @@ const getCommentsByArticleId = (req, res, next) => {
 const addComment = (req, res, next) => {
   const { article_id } = req.params;
   insertComment({ article_id, ...req.body })
-    .then(comment => {
-      if (!comment[0].body.length) {
-        return Promise.reject({
-          status: 400,
-          msg: "Comment has no body!"
-        });
-      } else {
-        return res.status(201).send(comment);
-      }
+    .then(commentArr => {
+      const [comment] = commentArr;
+      return res.status(201).send({ comment });
     })
     .catch(next);
 };

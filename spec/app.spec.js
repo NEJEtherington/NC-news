@@ -25,6 +25,15 @@ describe("/", () => {
           expect(body.ok).to.equal(true);
         });
     });
+
+    it("GET responds with JSON file describing all available endpoints", () => {
+      return request
+        .get("/api")
+        .expect(200)
+        .then(res => {
+          // console.log(res);
+        });
+    });
   });
 
   describe("/api/topics", () => {
@@ -44,6 +53,13 @@ describe("/", () => {
         .then(res => {
           expect(res.body.topics[0]).to.contain.keys("slug", "description");
         });
+    });
+
+    it("PATCH status:405 - responds with error message when method not found", () => {
+      return request
+        .patch("/api/topics")
+        .send({ slug: "nick" })
+        .expect(405);
     });
   });
 
@@ -199,6 +215,13 @@ describe("/", () => {
           expect(res.body.articles).to.be.descendingBy("created_at");
         });
     });
+
+    it("PATCH status:405 - responds with error message when method not found", () => {
+      return request
+        .patch("/api/articles")
+        .send({ author: "nick" })
+        .expect(405);
+    });
   });
 
   describe("/api/articles/:article_id", () => {
@@ -207,7 +230,7 @@ describe("/", () => {
         .get("/api/articles/2")
         .expect(200)
         .then(res => {
-          expect(res.body.article[0].article_id).to.equal(2);
+          expect(res.body.article.article_id).to.equal(2);
         });
     });
 
@@ -216,7 +239,7 @@ describe("/", () => {
         .get("/api/articles/1")
         .expect(200)
         .then(res => {
-          expect(res.body.article[0]).to.contain.keys(
+          expect(res.body.article).to.contain.keys(
             "author",
             "title",
             "article_id",
@@ -253,27 +276,37 @@ describe("/", () => {
         .send({ inc_votes: -99 })
         .expect(200)
         .then(res => {
-          expect(res.body.article[0].votes).to.equal(1);
+          expect(res.body.article.votes).to.equal(1);
         });
     });
 
-    it("PATCH status:400 - :responds with error message when request is made with an invalid article_id", () => {
+    it("PATCH status:200 - :responds with unchanged article when request is made with an invalid article_id", () => {
       return request
         .patch("/api/articles/1")
         .send({ inc_votes: "z" })
-        .expect(400)
+        .expect(200)
         .then(res => {
-          expect(res.body.msg).to.equal("Bad Request");
+          expect(res.body.article.votes).to.equal(100);
         });
     });
 
-    it("PATCH status:400 - responds with error message when passed a malformed body", () => {
+    it("PATCH status:200 - responds with unchanged article when passed a malformed body", () => {
       return request
         .patch("/api/articles/1")
         .send({ pizza: 2 })
-        .expect(400)
+        .expect(200)
         .then(res => {
-          expect(res.body.msg).to.equal("Missing inc_votes key in body!");
+          expect(res.body).to.eql({
+            article: {
+              article_id: 1,
+              title: "Living in the shadow of a great man",
+              body: "I find this existence challenging",
+              votes: 100,
+              topic: "mitch",
+              author: "butter_bridge",
+              created_at: "2018-11-15T12:21:54.171Z"
+            }
+          });
         });
     });
 
@@ -287,6 +320,13 @@ describe("/", () => {
         });
     });
 
+    it("PUT status:405 - responds with error message when method not found", () => {
+      return request
+        .put("/api/articles/1")
+        .send({ slug: "nick" })
+        .expect(405);
+    });
+
     it("GET status:200 - responds with an array of comments for given article_id", () => {
       return request
         .get("/api/articles/1/comments")
@@ -294,6 +334,10 @@ describe("/", () => {
         .then(res => {
           expect(Array.isArray(res.body.comments)).to.equal(true);
         });
+    });
+
+    it("GET status:404 - responds with error if given a valid but inexistent article_id", () => {
+      return request.get("/api/articles/1000/comments").expect(404);
     });
 
     it("GET status:200 - array has required properties", () => {
@@ -357,12 +401,12 @@ describe("/", () => {
         .send(newComment)
         .expect(201)
         .then(res => {
-          expect(res.body[0].author).to.equal("icellusedkars");
-          expect(res.body[0].body).to.equal("today is Friday");
+          expect(res.body.comment.author).to.equal("icellusedkars");
+          expect(res.body.comment.body).to.equal("today is Friday");
         });
     });
 
-    it("POST status:400 - responds with error message when not passed a body", () => {
+    it("POST status:201 - responds with unchanged comment when not passed a body", () => {
       const newComment = {
         author: "icellusedkars",
         body: ""
@@ -370,10 +414,7 @@ describe("/", () => {
       return request
         .post("/api/articles/1/comments")
         .send(newComment)
-        .expect(400)
-        .then(res => {
-          expect(res.body.msg).to.equal("Comment has no body!");
-        });
+        .expect(201);
     });
 
     it("POST status:400 - responds with error message when request body contains invalid keys", () => {
@@ -396,12 +437,27 @@ describe("/", () => {
         body: "Sometimes it snows in April"
       };
       return request
-        .post("/api.articles/1/comments")
+        .post("/api/articles/1/comments")
         .send(newComment)
-        .expect(404)
-        .then(res => {
-          expect(res.body.msg).to.equal("Route Not Found");
-        });
+        .expect(404);
+    });
+
+    it("POST status:404 - responds with error when post contains a valid but inexistent article ID", () => {
+      const newComment = {
+        author: "icellusedkars",
+        body: "Cake"
+      };
+      return request
+        .post("/api/articles/10000/comments")
+        .send(newComment)
+        .expect(404);
+    });
+
+    it("PUT status:405 - responds with error message when method not found", () => {
+      return request
+        .put("/api/articles/1/comments")
+        .send({ title: "nick" })
+        .expect(405);
     });
   });
 
@@ -412,27 +468,47 @@ describe("/", () => {
         .send({ inc_votes: -15 })
         .expect(200)
         .then(res => {
-          expect(res.body.comment[0].votes).to.equal(1);
+          expect(res.body.comment.votes).to.equal(1);
         });
     });
 
-    it("PATCH status:400 - responds with error message when request is made with an invalid comment_id", () => {
+    it("PATCH status:200 - responds with unchaged comment when request is made with an invalid comment_id", () => {
       return request
         .patch("/api/comments/1")
         .send({ inc_votes: "capybara" })
-        .expect(400)
+        .expect(200)
         .then(res => {
-          expect(res.body.msg).to.equal("Bad Request");
+          expect(res.body).to.eql({
+            comment: {
+              comment_id: 1,
+              author: "butter_bridge",
+              article_id: 9,
+              votes: 16,
+              created_at: "2017-11-22T12:36:03.389Z",
+              body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+            }
+          });
         });
     });
 
-    it("PATCH status:400 - responds with error message when passed a malformed body", () => {
+    it("PATCH status:400 - responds with unchanged comment when passed a malformed body", () => {
       return request
         .patch("/api/comments/1")
         .send({ broccoli: 2 })
-        .expect(400)
+        .expect(200)
         .then(res => {
-          expect(res.body.msg).to.equal("Missing inc_votes key in body!");
+          expect(res.body).to.eql({
+            comment: {
+              comment_id: 1,
+              author: "butter_bridge",
+              article_id: 9,
+              votes: 16,
+              created_at: "2017-11-22T12:36:03.389Z",
+              body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+            }
+          });
         });
     });
 
@@ -466,7 +542,7 @@ describe("/", () => {
         .get("/api/users/butter_bridge")
         .expect(200)
         .then(res => {
-          expect(res.body.user[0]).to.contain.keys(
+          expect(res.body.user).to.contain.keys(
             "username",
             "avatar_url",
             "name"
@@ -474,12 +550,12 @@ describe("/", () => {
         });
     });
 
-    it("GET status:404 - responds with error when passed invalis username", () => {
+    it("GET status:404 - responds with error when passed invalid username", () => {
       return request
         .get("/api/users/rosie")
-        .expect(400)
+        .expect(404)
         .then(res => {
-          expect(res.body.msg).to.equal("Invalid username!");
+          expect(res.body.msg).to.equal("User not found");
         });
     });
   });

@@ -3,7 +3,8 @@ const apiRouter = require("./routes/api");
 const {
   routeNotFound,
   handleCustomErrors,
-  handlePsqlErrors,
+  handlePsqlErrors400,
+  handlePsqlErrors404,
   handleServerErrors
 } = require("./errors");
 
@@ -17,7 +18,9 @@ app.all("/*", routeNotFound);
 
 app.use(handleCustomErrors);
 
-app.use(handlePsqlErrors);
+app.use(handlePsqlErrors400);
+
+app.use(handlePsqlErrors404);
 
 app.use(handleServerErrors);
 
