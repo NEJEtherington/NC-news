@@ -447,7 +447,7 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status:400 - responds with unchanged comment when passed a malformed body", () => {
+    it("PATCH status:200 - responds with unchanged comment when passed a malformed body", () => {
       return request
         .patch("/api/comments/1")
         .send({ broccoli: 2 })
@@ -489,6 +489,10 @@ describe("/", () => {
           expect(res.body.msg).to.equal("comment_id not found");
         });
     });
+
+    it("PUT status:405 - responds with error message when method not found", () => {
+      return request.put("/api/comments/1").expect(405);
+    });
   });
 
   describe("/api/users/:username", () => {
@@ -512,6 +516,10 @@ describe("/", () => {
         .then(res => {
           expect(res.body.msg).to.equal("User not found");
         });
+    });
+
+    it("PUT status:405 - responds with error message when method not found", () => {
+      return request.put("/api/users/butter_bridge").expect(405);
     });
   });
 });
