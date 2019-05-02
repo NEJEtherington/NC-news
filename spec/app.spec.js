@@ -235,20 +235,23 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status:200 - :responds with unchanged article when request is made with an invalid article_id", () => {
+    it("PATCH status:400 - :responds with error when request is made with an invalid article_id", () => {
       return request
         .patch("/api/articles/1")
         .send({ inc_votes: "z" })
-        .expect(200)
-        .then(res => {
-          expect(res.body.article.votes).to.equal(100);
-        });
+        .expect(400);
     });
 
-    it("PATCH status:200 - responds with unchanged article when passed a malformed body", () => {
+    it("PATCH status:400 - responds with error when passed a malformed body", () => {
       return request
         .patch("/api/articles/1")
         .send({ pizza: 2 })
+        .expect(400);
+    });
+
+    it("PATCH status:200 - responds with unchanged article when request has no body", () => {
+      return request
+        .patch("/api/articles/1")
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({
@@ -293,6 +296,15 @@ describe("/", () => {
 
     it("GET status:404 - responds with error if given a valid but inexistent article_id", () => {
       return request.get("/api/articles/1000/comments").expect(404);
+    });
+
+    it("GET status:200 - responds with empty array when article has no comments", () => {
+      return request
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.eql({ comments: [] });
+        });
     });
 
     it("GET status:200 - array has required properties", () => {
@@ -346,9 +358,9 @@ describe("/", () => {
         });
     });
 
-    it("POST status:201 - request body accepts object with userame and body properties and responds with posted comment", () => {
+    it("POST status:201 - request body accepts object with username and body properties and responds with posted comment", () => {
       const newComment = {
-        author: "icellusedkars",
+        username: "icellusedkars",
         body: "today is Friday"
       };
       return request
@@ -363,7 +375,7 @@ describe("/", () => {
 
     it("POST status:201 - responds with unchanged comment when not passed a body", () => {
       const newComment = {
-        author: "icellusedkars",
+        username: "icellusedkars",
         body: ""
       };
       return request
@@ -388,7 +400,7 @@ describe("/", () => {
 
     it("POST status:404 - responds with error message when request body has invalid author", () => {
       const newComment = {
-        author: "Prince",
+        username: "Prince",
         body: "Sometimes it snows in April"
       };
       return request
@@ -399,7 +411,7 @@ describe("/", () => {
 
     it("POST status:404 - responds with error when post contains a valid but inexistent article ID", () => {
       const newComment = {
-        author: "icellusedkars",
+        username: "icellusedkars",
         body: "Cake"
       };
       return request
@@ -427,30 +439,23 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status:200 - responds with unchaged comment when request is made with an invalid comment_id", () => {
+    it("PATCH status:400 - responds with unchaged comment when request is made with an invalid comment_id", () => {
       return request
         .patch("/api/comments/1")
         .send({ inc_votes: "capybara" })
-        .expect(200)
-        .then(res => {
-          expect(res.body).to.eql({
-            comment: {
-              comment_id: 1,
-              author: "butter_bridge",
-              article_id: 9,
-              votes: 16,
-              created_at: "2017-11-22T12:36:03.389Z",
-              body:
-                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
-            }
-          });
-        });
+        .expect(400);
     });
 
-    it("PATCH status:200 - responds with unchanged comment when passed a malformed body", () => {
+    it("PATCH status:400 - responds with error when passed a malformed body", () => {
       return request
         .patch("/api/comments/1")
         .send({ broccoli: 2 })
+        .expect(400);
+    });
+
+    it("PATCH status:200 - responds with unchanged comment when request has no body", () => {
+      return request
+        .patch("/api/comments/1")
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({

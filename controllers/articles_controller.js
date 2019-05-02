@@ -41,30 +41,48 @@ const getArticleById = (req, res, next) => {
 const patchArticleVotes = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
+
   updateArticleVotes(article_id, inc_votes)
     .then(articleArr => {
       const [article] = articleArr;
-      if (!articleArr.length) {
+      if (Object.keys(req.body).length === 0) {
+        return res.status(200).send({ article });
+      }
+      if (typeof inc_votes !== "number") {
         return Promise.reject({
-          status: 404,
-          msg: "Article id does not exist!"
+          status: 400,
+          msg: "Invalid value for inc_votes"
         });
       } else {
-        return res.status(200).send({ article });
+        if (!articleArr.length) {
+          return Promise.reject({
+            status: 404,
+            msg: "Article id does not exist!"
+          });
+        } else {
+          return res.status(200).send({ article });
+        }
       }
     })
     .catch(next);
 };
 
 const getCommentsByArticleId = (req, res, next) => {
-  fetchCommentsByArticleId({ ...req.query, ...req.params })
-    .then(comments => {
-      if (comments.length === 0)
+  const { article_id } = req.params;
+  fetchArticleById(article_id)
+    .then(articleArr => {
+      if (!articleArr.length) {
         return Promise.reject({
           status: 404,
           msg: "Article id does not exist!"
         });
-      return res.status(200).send({ comments });
+      } else {
+        fetchCommentsByArticleId({ ...req.query, ...req.params }).then(
+          comments => {
+            return res.status(200).send({ comments });
+          }
+        );
+      }
     })
     .catch(next);
 };

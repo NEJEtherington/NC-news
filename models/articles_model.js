@@ -82,15 +82,12 @@ const fetchCommentsByArticleId = ({ article_id, sort_by, order }) => {
     .orderBy(sort_by, order);
 };
 
-const insertComment = ({ article_id, author, body }) => {
+const insertComment = ({ article_id, username, body }) => {
   return connection
     .from("comments")
     .where({ "comments.article_id": article_id })
-    .insert({ article_id: article_id, author: author, body: body })
-    .returning("*")
-    .then(result => {
-      return result;
-    });
+    .insert({ article_id: article_id, author: `${username}`, body: body })
+    .returning("*");
 };
 
 module.exports = {
