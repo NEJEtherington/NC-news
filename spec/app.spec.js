@@ -235,7 +235,7 @@ describe("/", () => {
         });
     });
 
-    it("PATCH status:400 - :responds with error when request is made with an invalid article_id", () => {
+    it("PATCH status:400 - :responds with error when request is made with an invalid inc_votes value", () => {
       return request
         .patch("/api/articles/1")
         .send({ inc_votes: "z" })
