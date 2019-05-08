@@ -6,6 +6,8 @@ const {
   insertComment
 } = require("../models/articles_model");
 
+const { fetchUserByUsername } = require("../models/users_model");
+
 const getAllArticles = (req, res, next) => {
   fetchAllArticles(req.query)
     .then(articles => {
@@ -89,10 +91,37 @@ const getCommentsByArticleId = (req, res, next) => {
 
 const addComment = (req, res, next) => {
   const { article_id } = req.params;
-  insertComment({ article_id, ...req.body })
-    .then(commentArr => {
-      const [comment] = commentArr;
-      return res.status(201).send({ comment });
+  fetchArticleById(article_id)
+    .then(articleArr => {
+      if (
+        !Object.keys(req.body).includes("username") ||
+        !Object.keys(req.body).includes("body")
+      ) {
+        return Promise.reject({
+          status: 400,
+          msg: "Bad Request"
+        });
+      }
+      if (!articleArr.length) {
+        return Promise.reject({
+          status: 404,
+          msg: "Article id does not exist!"
+        });
+      } else {
+        fetchUserByUsername(req.body.username).then(userArr => {
+          if (!userArr.length) {
+            return Promise.reject({
+              status: 400,
+              msg: "User not found"
+            }).catch(next);
+          } else {
+            insertComment({ article_id, ...req.body }).then(commentArr => {
+              const [comment] = commentArr;
+              return res.status(201).send({ comment });
+            });
+          }
+        });
+      }
     })
     .catch(next);
 };
