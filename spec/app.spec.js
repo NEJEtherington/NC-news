@@ -398,7 +398,7 @@ describe("/", () => {
         });
     });
 
-    it("POST status:404 - responds with error message when request body has invalid author", () => {
+    it("POST status:400 - responds with error message when request body has invalid author", () => {
       const newComment = {
         username: "Prince",
         body: "Sometimes it snows in April"
@@ -406,7 +406,7 @@ describe("/", () => {
       return request
         .post("/api/articles/1/comments")
         .send(newComment)
-        .expect(404);
+        .expect(400);
     });
 
     it("POST status:404 - responds with error when post contains a valid but inexistent article ID", () => {

@@ -4,7 +4,6 @@ const {
   routeNotFound,
   handleCustomErrors,
   handlePsqlErrors400,
-  handlePsqlErrors404,
   handleServerErrors
 } = require("./errors");
 
@@ -19,8 +18,6 @@ app.all("/*", routeNotFound);
 app.use(handleCustomErrors);
 
 app.use(handlePsqlErrors400);
-
-app.use(handlePsqlErrors404);
 
 app.use(handleServerErrors);
 
