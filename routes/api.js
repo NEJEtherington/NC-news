@@ -9,7 +9,6 @@ const { getJSONEndpoints } = require("../utils/endpoints");
 apiRouter
   .route("/")
   .get((req, res, next) => {
-    console.log("hello");
     return res.status(200).send({ endpoints: getJSONEndpoints() });
   })
   .all(methodNotAllowed);
