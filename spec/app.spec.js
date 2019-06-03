@@ -18,20 +18,15 @@ describe("/", () => {
 
   describe("/api", () => {
     it("GET status:200", () => {
-      return request
-        .get("/api")
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.ok).to.equal(true);
-        });
+      return request.get("/api").expect(200);
     });
 
     it("GET responds with JSON file describing all available endpoints", () => {
       return request
         .get("/api")
         .expect(200)
-        .then(res => {
-          // console.log(res);
+        .then(({ body }) => {
+          expect(body).to.be.an("object");
         });
     });
   });
@@ -384,7 +379,7 @@ describe("/", () => {
         .expect(201);
     });
 
-    it("POST status:400 - responds with error message when request body contains invalid keys", () => {
+    it.only("POST status:400 - responds with error message when request body contains invalid keys", () => {
       const newComment = {
         weekend: "icellusedkars",
         rain: "same old"
@@ -394,6 +389,7 @@ describe("/", () => {
         .send(newComment)
         .expect(400)
         .then(res => {
+          console.log(res);
           expect(res.body.msg).to.equal("Bad Request");
         });
     });
