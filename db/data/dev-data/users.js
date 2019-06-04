@@ -3,12 +3,13 @@ module.exports = [
     username: "tickle122",
     name: "Tom Tickle",
     avatar_url:
-      "https://www.spiritsurfers.net/monastery/wp-content/uploads/_41500270_mrtickle.jpg"
+      "http://www.ftfsound.co.uk/uploads/4/6/4/1/4641615/shopped-3-small-2_orig.png"
   },
   {
     username: "grumpy19",
     name: "Paul Grump",
-    avatar_url: "https://www.tumbit.com/profile-image/4/original/mr-grumpy.jpg"
+    avatar_url:
+      "https://media.mnn.com/assets/images/2018/03/3Dstock%20tardigrade%20shutter%20cc.jpg.653x0_q80_crop-smart.jpg"
   },
   {
     username: "happyamy2016",
@@ -19,13 +20,14 @@ module.exports = [
   {
     username: "cooljmessy",
     name: "Peter Messy",
-    avatar_url: "https://i.imgur.com/WfX0Neu.jpg"
+    avatar_url:
+      "https://i0.wp.com/media.boingboing.net/wp-content/uploads/2018/07/Boston-Pizza-table-and-chairs.png?w=1320&ssl=1"
   },
   {
     username: "weegembump",
     name: "Gemma Bump",
     avatar_url:
-      "https://www.upandrunning.co.uk/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/m/r/mr-bump.jpg"
+      "https://images.theconversation.com/files/259958/original/file-20190220-148536-4io247.jpg?ixlib=rb-1.1.0&rect=0%2C1583%2C3350%2C2306&q=45&auto=format&w=926&fit=clip"
   },
   {
     username: "jessjelly",
