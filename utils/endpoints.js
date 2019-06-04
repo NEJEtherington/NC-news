@@ -18,7 +18,7 @@ const getJSONEndpoints = () => {
     },
     "GET /api/articles": {
       description:
-        "serves an array of all topics, default sorted by created_at in descending order",
+        "serves an array of all articles, default sorted by created_at in descending order",
       queries: ["author", "topic", "sort_by", "order"],
       exampleResponse: {
         articles: [
