@@ -216,7 +216,7 @@ describe("/", () => {
         .get("/api/articles/10000")
         .expect(404)
         .then(res => {
-          expect(res.body.msg).to.equal("Article id does not exist!");
+          expect(res.body.msg).to.equal("Article does not exist!");
         });
     });
 
@@ -379,7 +379,7 @@ describe("/", () => {
         .expect(201);
     });
 
-    it.only("POST status:400 - responds with error message when request body contains invalid keys", () => {
+    it("POST status:400 - responds with error message when request body contains invalid keys", () => {
       const newComment = {
         weekend: "icellusedkars",
         rain: "same old"

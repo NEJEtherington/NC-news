@@ -31,7 +31,7 @@ const getArticleById = (req, res, next) => {
       if (!articleArr.length) {
         return Promise.reject({
           status: 404,
-          msg: "Article id does not exist!"
+          msg: "Article does not exist!"
         });
       } else {
         return res.status(200).send({ article: article });
