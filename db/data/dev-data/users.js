@@ -3,7 +3,7 @@ module.exports = [
     username: "tickle122",
     name: "Tom Tickle",
     avatar_url:
-      "http://www.ftfsound.co.uk/uploads/4/6/4/1/4641615/shopped-3-small-2_orig.png"
+      "https://celestion.com/speakerworld/images/cabinetdesigns/216.jpg"
   },
   {
     username: "grumpy19",
