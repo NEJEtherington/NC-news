@@ -1,6 +1,6 @@
 # NC-news
 
-This repo is the backend API for a news app that allows users to read and sort articles, as well as add and remove comments and vote on articles and comments.
+This repo is the backend API for a news app that allows users to read and post articlesand comments, and to vote on them.
 
 ## Built With
 
