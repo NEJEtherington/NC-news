@@ -11,6 +11,7 @@ exports.up = function(knex, Promise) {
       .defaultTo(0);
     commentsData.timestamp("created_at").defaultTo(knex.fn.now());
     commentsData.text("body").notNullable();
+    commentsData.string("user_avatar").notNullable();
   });
 };
 
