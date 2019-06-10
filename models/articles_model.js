@@ -24,13 +24,11 @@ const fetchAllArticles = ({ author, topic, sort_by, order }) => {
       "articles.article_id",
       "topic",
       "articles.created_at",
-      "articles.votes",
-      "articles.user_avatar"
+      "articles.votes"
     )
     .count({ comment_count: "comment_id" })
     .from("articles")
     .leftJoin("comments", "comments.article_id", "=", "articles.article_id")
-    .leftJoin("users", "users.avatar_url", "=", "articles.user_avatar")
     .groupBy("articles.article_id")
     .orderBy(sort_by, order)
     .modify(query => {

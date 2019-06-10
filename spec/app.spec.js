@@ -73,7 +73,6 @@ describe("/", () => {
         .get("/api/articles")
         .expect(200)
         .then(res => {
-          console.log(res.body);
           expect(res.body.articles[0]).to.contain.keys(
             "author",
             "title",
@@ -81,8 +80,7 @@ describe("/", () => {
             "topic",
             "created_at",
             "votes",
-            "comment_count",
-            "user_avatar"
+            "comment_count"
           );
         });
     });
@@ -258,8 +256,6 @@ describe("/", () => {
               body: "I find this existence challenging",
               votes: 100,
               topic: "mitch",
-              user_avatar:
-                "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
               author: "butter_bridge",
               created_at: "2018-11-15T12:21:54.171Z"
             }
