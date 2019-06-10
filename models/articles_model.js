@@ -80,31 +80,17 @@ const fetchCommentsByArticleId = ({ article_id, sort_by, order }) => {
     order = "desc";
   }
   return connection
-    .select(
-      "comment_id",
-      "votes",
-      " created_at",
-      "author",
-      "body",
-      "comments.user_avatar"
-    )
+    .select("comment_id", "votes", " created_at", "author", "body")
     .from("comments")
     .where({ "comments.article_id": article_id })
-    .leftJoin("users", "users.avatar_url", "=", "comments.user_avatar")
     .orderBy(sort_by, order);
 };
 
 const insertComment = ({ article_id, username, body }) => {
   return connection
     .from("comments")
-    .where({
-      "comments.article_id": article_id
-    })
-    .insert({
-      article_id: article_id,
-      author: `${username}`,
-      body: body
-    })
+    .where({ "comments.article_id": article_id })
+    .insert({ article_id: article_id, author: `${username}`, body: body })
     .returning("*");
 };
 
