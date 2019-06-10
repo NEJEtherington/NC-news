@@ -48,12 +48,14 @@ const fetchArticleById = article_id => {
       "topic",
       "articles.body",
       "articles.created_at",
-      "articles.votes"
+      "articles.votes",
+      "articles.user_avatar"
     )
     .count({ comment_count: "comment_id" })
     .from("articles")
     .where({ "articles.article_id": article_id })
     .leftJoin("comments", "comments.article_id", "=", "articles.article_id")
+    .leftJoin("users", "users.avatar_url", "=", "articles.user_avatar")
     .groupBy("articles.article_id");
 };
 
