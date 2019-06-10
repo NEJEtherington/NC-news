@@ -12,6 +12,7 @@ exports.up = function(knex, Promise) {
     articlesData.string("author").notNullable();
     articlesData.foreign("author").references("users.username");
     articlesData.timestamp("created_at").defaultTo(knex.fn.now());
+    articlesData.string("user_avatar").notNullable();
   });
 };
 

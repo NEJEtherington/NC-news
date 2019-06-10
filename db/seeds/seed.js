@@ -22,7 +22,18 @@ exports.seed = (knex, Promise) => {
     })
 
     .then(() => {
-      const formattedArticlesData = formatDataForTimeStamp(articlesData);
+      const articlesDataWithDate = formatDataForTimeStamp(articlesData);
+      const formattedArticlesData = articlesDataWithDate.map(article => {
+        const { author, ...otherArticleData } = article;
+        const user_avatar = usersData.find(
+          user => user.username === article.author
+        );
+        return {
+          user_avatar: user_avatar.avatar_url,
+          author,
+          ...otherArticleData
+        };
+      });
       return knex("articles")
         .insert(formattedArticlesData)
         .returning("*");
