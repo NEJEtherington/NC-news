@@ -119,7 +119,6 @@ const addComment = (req, res, next) => {
           } else {
             insertComment({ article_id, ...req.body }).then(commentArr => {
               const [comment] = commentArr;
-              console.log(comment);
               return res.status(201).send({ comment });
             });
           }
