@@ -80,7 +80,8 @@ describe("/", () => {
             "topic",
             "created_at",
             "votes",
-            "comment_count"
+            "comment_count",
+            "avatar_url"
           );
         });
     });
@@ -197,7 +198,8 @@ describe("/", () => {
             "body",
             "created_at",
             "votes",
-            "comment_count"
+            "comment_count",
+            "avatar_url"
           );
         });
     });
@@ -312,7 +314,8 @@ describe("/", () => {
             "votes",
             "created_at",
             "author",
-            "body"
+            "body",
+            "avatar_url"
           );
         });
     });
@@ -389,7 +392,6 @@ describe("/", () => {
         .send(newComment)
         .expect(400)
         .then(res => {
-          console.log(res);
           expect(res.body.msg).to.equal("Bad Request");
         });
     });

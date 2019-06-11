@@ -24,12 +24,14 @@ const fetchAllArticles = ({ author, topic, sort_by, order }) => {
       "articles.article_id",
       "topic",
       "articles.created_at",
-      "articles.votes"
+      "articles.votes",
+      "users.avatar_url"
     )
     .count({ comment_count: "comment_id" })
     .from("articles")
     .leftJoin("comments", "comments.article_id", "=", "articles.article_id")
-    .groupBy("articles.article_id")
+    .leftJoin("users", "users.username", "=", "articles.author")
+    .groupBy("articles.article_id", "users.avatar_url")
     .orderBy(sort_by, order)
     .modify(query => {
       if (author) query.where("articles.author", author);
@@ -46,13 +48,15 @@ const fetchArticleById = article_id => {
       "topic",
       "articles.body",
       "articles.created_at",
-      "articles.votes"
+      "articles.votes",
+      "users.avatar_url"
     )
     .count({ comment_count: "comment_id" })
     .from("articles")
     .where({ "articles.article_id": article_id })
     .leftJoin("comments", "comments.article_id", "=", "articles.article_id")
-    .groupBy("articles.article_id");
+    .leftJoin("users", "users.username", "=", "articles.author")
+    .groupBy("articles.article_id", "users.avatar_url");
 };
 
 const updateArticleVotes = (article_id, inc_votes) => {
@@ -76,9 +80,17 @@ const fetchCommentsByArticleId = ({ article_id, sort_by, order }) => {
     order = "desc";
   }
   return connection
-    .select("comment_id", "votes", " created_at", "author", "body")
+    .select(
+      "comment_id",
+      "votes",
+      " created_at",
+      "author",
+      "body",
+      "users.avatar_url"
+    )
     .from("comments")
     .where({ "comments.article_id": article_id })
+    .leftJoin("users", "users.username", "=", "comments.author")
     .orderBy(sort_by, order);
 };
 
