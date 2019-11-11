@@ -1,0 +1,24 @@
+version: '3'
+services:
+  api:
+    network_mode: "host"
+    build: .
+    ports:
+      - 4000:9090
+    depends_on: 
+      - db
+    # need to set sleep so that postgres is up and running before the srcipts are run
+    command: bash -c "sleep 1 && npm run migrate-latest --file connection.js && npm run seed --file connection.js && npm start"
+  db:
+    network_mode: "host"
+    image: "postgres"
+    environment:
+    # connect to postgres first as if connect to ncnews DB DROP DATABASE will result in error 
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/setup.sql:/docker-entrypoint-initdb.d/1-setup.sql
+  
