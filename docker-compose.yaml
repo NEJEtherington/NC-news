@@ -1,13 +1,15 @@
-version: '3'
+version: '3.2'
 services:
   api:
+    # gives container access to localhost
     network_mode: "host"
     build: .
     ports:
       - 4000:9090
     depends_on: 
       - db
-    # need to set sleep so that postgres is up and running before the srcipts are run
+    # need to set sleep so that postgres is up and running before the scripts are run
+    # api container will exit after seed script if don't include npm start script 
     command: bash -c "sleep 1 && npm run migrate-latest --file connection.js && npm run seed --file connection.js && npm start"
   db:
     network_mode: "host"
@@ -21,4 +23,10 @@ services:
       - 5432:5432
     volumes:
       - ./db/setup.sql:/docker-entrypoint-initdb.d/1-setup.sql
+      - type: bind
+        source: ./pgdata
+        target: /var/lib/postgresql/data
+volumes:
+  pgdata:
+    external: true
   
