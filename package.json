@@ -31,6 +31,6 @@
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.18.11",
-    "supertest": "^4.0.2"
+    "supertest": "^5.0.0"
   }
 }
